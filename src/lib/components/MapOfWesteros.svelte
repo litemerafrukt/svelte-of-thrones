@@ -1,12 +1,19 @@
 <script lang="ts">
+import type { KingdomBoundary } from '$lib/models/kingdoms'
+
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { onMount } from 'svelte'
+import { onMount, setContext } from 'svelte'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
 
 let container: HTMLDivElement | null = null
 let map: mapboxgl.Map | null = null
+let isLoaded = false
+
+setContext('mapbox-gl', {
+  getMap: () => map
+})
 
 onMount(() => {
   if (!container) throw new Error("Can't create map on null container")
@@ -41,12 +48,14 @@ onMount(() => {
     maxZoom: 6,
     center: [21, 13],
     zoom: 3.5
+  }).on('load', () => {
+    isLoaded = true
   })
 })
 </script>
 
 <div bind:this={container}>
-  {#if map}
+  {#if map && isLoaded}
     <slot />
   {/if}
 </div>
