@@ -1,5 +1,5 @@
 <script lang="ts">
-import Map from '$lib/components/Map.svelte'
+import MapOfWesteros from '$lib/components/MapOfWesteros.svelte'
 </script>
 
-<Map />
+<MapOfWesteros />
