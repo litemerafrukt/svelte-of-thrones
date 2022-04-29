@@ -1,6 +1,6 @@
-import postgres from "postgres"
-const connectionString: string = process.env.DATABASE_URL!
-if (!connectionString) throw new Error("DATABASE_URL must be set")
+import postgres from 'postgres'
+const connectionString: string = import.meta.env.VITE_DATABASE_URL
+if (!connectionString) throw new Error('DATABASE_URL must be set')
 
 const sql = postgres(connectionString)
 
