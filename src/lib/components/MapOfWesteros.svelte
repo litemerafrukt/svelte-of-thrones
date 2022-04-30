@@ -59,14 +59,14 @@ onMount(() => {
 })
 </script>
 
-<div bind:this={container}>
+<div class="map-container" bind:this={container}>
   {#if map && isLoaded}
     <slot />
   {/if}
 </div>
 
 <style>
-div {
+.map-container {
   width: 100vw;
   height: 100vh;
 }
