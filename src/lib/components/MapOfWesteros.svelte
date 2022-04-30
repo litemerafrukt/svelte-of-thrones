@@ -1,5 +1,7 @@
 <script lang="ts">
-import type { KingdomBoundary } from '$lib/models/kingdoms'
+import { browser } from '$app/env'
+
+import { goto } from '$app/navigation'
 
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
@@ -16,41 +18,44 @@ setContext('mapbox-gl', {
 })
 
 onMount(() => {
-  if (!container) throw new Error("Can't create map on null container")
-
-  map = new mapboxgl.Map({
-    container,
-    style: {
-      version: 8,
-      sources: {
-        'raster-tiles': {
-          type: 'raster',
-          tiles: [
-            'https://cartocdn-gusc.global.ssl.fastly.net/ramirocartodb/api/v1/map/named/tpl_756aec63_3adb_48b6_9d14_331c6cbc47cf/all/{z}/{x}/{y}.png'
-          ],
-          tileSize: 256
-        }
+  console.log(container)
+  console.log(map)
+  if (map === null && browser && container) {
+    console.log('MapOfWesteros: container is ready')
+    map = new mapboxgl.Map({
+      container,
+      style: {
+        version: 8,
+        sources: {
+          'raster-tiles': {
+            type: 'raster',
+            tiles: [
+              'https://cartocdn-gusc.global.ssl.fastly.net/ramirocartodb/api/v1/map/named/tpl_756aec63_3adb_48b6_9d14_331c6cbc47cf/all/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256
+          }
+        },
+        layers: [
+          {
+            id: 'simple-tiles',
+            type: 'raster',
+            source: 'raster-tiles',
+            minzoom: 2,
+            maxzoom: 7
+          }
+        ]
       },
-      layers: [
-        {
-          id: 'simple-tiles',
-          type: 'raster',
-          source: 'raster-tiles',
-          minzoom: 2,
-          maxzoom: 7
-        }
-      ]
-    },
-    maxBounds: [
-      [-20, -40],
-      [90, 45]
-    ],
-    maxZoom: 6,
-    center: [21, 13],
-    zoom: 3.5
-  }).on('load', () => {
-    isLoaded = true
-  })
+      maxBounds: [
+        [-20, -40],
+        [90, 45]
+      ],
+      maxZoom: 6,
+      center: [21, 13],
+      zoom: 3.5
+    }).on('load', () => {
+      isLoaded = true
+    })
+  }
 })
 </script>
 

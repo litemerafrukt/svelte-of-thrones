@@ -1,51 +1,25 @@
 <script lang="ts">
 import type { KingdomBoundary } from '$lib/models/kingdoms'
-import type mapboxgl from 'mapbox-gl'
-import { onMount, createEventDispatcher, getContext } from 'svelte'
+import { getContext, onMount } from 'svelte'
+import Kingdom from './Kingdom.svelte'
 
 export let boundaries: KingdomBoundary[]
+export let selected: number | null
 
 const { getMap } = getContext<{ getMap: () => mapboxgl.Map }>('mapbox-gl')
 const map = getMap()
 
-const dispatch = createEventDispatcher()
+boundaries.forEach((boundary) => {
+  const gid = boundary.properties.gid
+  const sourceId = `kingdom-boundary-${gid}`
 
-const kingdomsStyle = {
-  color: '#222',
-  weight: 1,
-  opacity: 0.65
-}
-
-onMount(async () => {
-  boundaries.forEach(async (boundary) => {
-    const gid = boundary.properties.gid
-    const id = `kingdom-boundary-${gid}`
-
-    await map
-      .addSource(id, {
-        type: 'geojson',
-        data: boundary
-      })
-      .addLayer({
-        id: `kingdom-${gid}`,
-        metadata: { type: 'kingdom', gid },
-        type: 'fill',
-        source: id,
-        paint: {
-          'fill-color': '#222',
-          'fill-opacity': 0.15
-        }
-      })
-      .addLayer({
-        id: `kingdom-outline-${gid}`,
-        metadata: { type: 'kingdom', gid },
-        type: 'line',
-        source: id,
-        paint: {
-          'line-color': '#222',
-          'line-opacity': 0.65
-        }
-      })
+  map.addSource(sourceId, {
+    type: 'geojson',
+    data: boundary
   })
 })
 </script>
+
+{#each boundaries as boundary (`${boundary.properties.gid}-${selected === boundary.properties.gid}`)}
+  <Kingdom {boundary} isSelected={selected === boundary.properties.gid} />
+{/each}
