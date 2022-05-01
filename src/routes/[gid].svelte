@@ -1,13 +1,24 @@
-<script lang="ts">
-import Kingdoms from '$lib/components/Kingdoms.svelte'
+<script lang="ts" context="module">
+import type { LoadInput } from '@sveltejs/kit'
 
-import MapOfWesteros from '$lib/components/MapOfWesteros.svelte'
-import type { KingdomBoundary } from '$lib/models/kingdoms'
+export async function load({ params, fetch, session, stuff }: LoadInput) {
+  const selected = Number(params.gid)
 
-export let kingdomBoundaries: KingdomBoundary[]
-export let selectedKingdom: number | null = null
+  return {
+    props: {
+      selected
+    }
+  }
+}
 </script>
 
-<MapOfWesteros>
-  <Kingdoms boundaries={kingdomBoundaries} selected={selectedKingdom} />
-</MapOfWesteros>
+<script lang="ts">
+export let selected: number
+</script>
+
+<h1>Info panel {selected}</h1>
+<p>
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pellentesque, nisi eu
+  vestibulum consectetur, eros nisi volutpat lectus, eget condimentum nisl nisl sed nunc.
+  Donec eget consectetur eros. Donec eget consectetur eros.
+</p>

@@ -1,16 +1,13 @@
 import { getKingdomBoundaries } from '$lib/models/kingdoms'
 
-/**
- * Respond with boundary geojson for all kingdoms
- */
-export const get = async ({ params }: { params: Record<string, string> }) => {
+/** Respond with boundary geojson for all kingdoms */
+export const get = async () => {
   try {
-    const selectedKingdom = Number(params.gid)
     const kingdomBoundaries = await getKingdomBoundaries()
 
     return {
       status: 200,
-      body: { kingdomBoundaries, selectedKingdom }
+      body: kingdomBoundaries
     }
   } catch (err: any) {
     console.error(err)
