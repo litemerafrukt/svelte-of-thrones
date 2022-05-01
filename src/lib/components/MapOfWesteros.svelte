@@ -1,11 +1,9 @@
 <script lang="ts">
 import { browser } from '$app/env'
 
-import { goto } from '$app/navigation'
-
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { onMount, setContext } from 'svelte'
+import { onDestroy, onMount, setContext } from 'svelte'
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
 
@@ -18,10 +16,7 @@ setContext('mapbox-gl', {
 })
 
 onMount(() => {
-  console.log(container)
-  console.log(map)
-  if (map === null && browser && container) {
-    console.log('MapOfWesteros: container is ready')
+  if (!map && browser && container) {
     map = new mapboxgl.Map({
       container,
       style: {
@@ -56,6 +51,11 @@ onMount(() => {
       isLoaded = true
     })
   }
+})
+
+onDestroy(() => {
+  map?.remove()
+  map = null
 })
 </script>
 

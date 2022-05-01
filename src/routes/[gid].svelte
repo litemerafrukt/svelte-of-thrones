@@ -1,24 +1,46 @@
 <script lang="ts" context="module">
+import { isObjectEmpty } from '$lib/utilities/isObjectEmpty'
+
 import type { LoadInput } from '@sveltejs/kit'
+
+const kingdomSummaryCache = new Map<number, any>()
 
 export async function load({ params, fetch, session, stuff }: LoadInput) {
   const selected = Number(params.gid)
 
-  return {
-    props: {
-      selected
+  if (!kingdomSummaryCache.has(selected)) {
+    const summary = await fetch(`/api/kingdoms/summary/${selected}`).then((response) => {
+      if (!response.ok) {
+        throw new Error('Failed to load kingdom summary')
+      }
+
+      return response.json()
+    })
+
+    if (isObjectEmpty(summary)) {
+      throw new Error(`No kingdom summary for ${selected}`)
     }
+    kingdomSummaryCache.set(selected, summary)
+  }
+
+  const kingdom = {
+    name: (stuff as any).kingdomNames[selected],
+    summary: kingdomSummaryCache.get(selected)
+  }
+
+  return {
+    props: { kingdom }
   }
 }
 </script>
 
 <script lang="ts">
-export let selected: number
+export let kingdom: any
 </script>
 
-<h1>Info panel {selected}</h1>
+<h1>{kingdom.name}</h1>
 <p>
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer pellentesque, nisi eu
-  vestibulum consectetur, eros nisi volutpat lectus, eget condimentum nisl nisl sed nunc.
-  Donec eget consectetur eros. Donec eget consectetur eros.
+  {kingdom.summary.summary}
 </p>
+
+<a href={kingdom.summary.url}>{kingdom.summary.url}</a>

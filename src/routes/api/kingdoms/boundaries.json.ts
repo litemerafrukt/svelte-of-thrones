@@ -1,4 +1,4 @@
-import { getKingdomBoundaries } from '$lib/models/kingdoms'
+import { getKingdomBoundaries } from '$lib/models/kingdoms.server'
 
 /** Respond with boundary geojson for all kingdoms */
 export const get = async () => {

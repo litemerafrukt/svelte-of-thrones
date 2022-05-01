@@ -1,19 +1,32 @@
 <script lang="ts" context="module">
 import type { LoadInput } from '@sveltejs/kit'
 
+let kingdomBoundaries: KingdomBoundary[]
+
 export async function load({ params, fetch, session, stuff }: LoadInput) {
   try {
-    const kingdomBoundaries = await fetch('/kingdom-boundaries.json').then((response) => {
-      if (!response.ok) {
-        throw new Error('Failed to load kingdom boundaries')
-      }
-      return response.json()
-    })
+    if (!kingdomBoundaries) {
+      kingdomBoundaries = await fetch('/api/kingdoms/boundaries.json').then(
+        (response) => {
+          if (!response.ok) {
+            throw new Error('Failed to load kingdom boundaries')
+          }
+          return response.json()
+        }
+      )
+    }
 
-    const selectedKingdom = Number(params.gid)
+    let selectedKingdom: number | null = Number(params.gid)
+    if (Number.isNaN(selectedKingdom)) selectedKingdom = null
+
+    const kingdomNames = kingdomBoundaries.reduce((names, boundary) => {
+      names[boundary.properties.gid] = boundary.properties.name
+      return names
+    }, {} as { [gid: number]: string })
 
     return {
       status: 200,
+      stuff: { kingdomNames },
       props: {
         selectedKingdom,
         kingdomBoundaries
@@ -33,9 +46,16 @@ import Kingdoms from '$lib/components/Kingdoms.svelte'
 
 import MapOfWesteros from '$lib/components/MapOfWesteros.svelte'
 import type { KingdomBoundary } from '$lib/models/kingdoms'
+import { page } from '$app/stores'
 
 export let kingdomBoundaries: KingdomBoundary[]
 export let selectedKingdom: number | null = null
+
+page.subscribe((state) => {
+  if (state.params.gid) {
+    selectedKingdom = Number(state.params.gid)
+  }
+})
 </script>
 
 <div class="layout-wrap">

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { goto } from '$app/navigation'
 
-import type { KingdomBoundary } from '$lib/models/kingdoms'
+import { kingdomBoundaryId, type KingdomBoundary } from '$lib/models/kingdoms'
 import type mapboxgl from 'mapbox-gl'
 import { getContext, onDestroy, onMount } from 'svelte'
 
@@ -12,14 +12,19 @@ const { getMap } = getContext<{ getMap: () => mapboxgl.Map }>('mapbox-gl')
 const map = getMap()
 
 const gid = boundary.properties.gid
-const sourceId = `kingdom-boundary-${gid}`
+const sourceId = kingdomBoundaryId(gid)
 const fillLayerId = `kingdom-${gid}`
 const outlineLayerId = `kingdom-outline-${gid}`
 const fillColor = isSelected ? '#0a0' : '#222'
-const onClick = () => goto(`${gid}`)
+const onClick = () => {
+  if (isSelected) {
+    goto(`/`)
+  } else {
+    goto(`${gid}`)
+  }
+}
 
 onMount(() => {
-  console.log('mount', gid)
   map
     .addLayer({
       id: fillLayerId,
@@ -45,7 +50,6 @@ onMount(() => {
 })
 
 onDestroy(() => {
-  console.log('destroy', gid)
   map.removeLayer(outlineLayerId)
   map.removeLayer(fillLayerId)
   map.off('click', fillLayerId, onClick)
