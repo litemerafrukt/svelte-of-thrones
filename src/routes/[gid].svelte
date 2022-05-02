@@ -1,6 +1,5 @@
 <script lang="ts" context="module">
 import { isObjectEmpty } from '$lib/utilities/isObjectEmpty'
-
 import type { LoadInput } from '@sveltejs/kit'
 
 const kingdomSummaryCache = new Map<number, any>()

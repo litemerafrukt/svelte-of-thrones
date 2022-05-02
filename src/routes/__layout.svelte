@@ -82,10 +82,11 @@ page.subscribe((state) => {
   background-color: #222;
   flex-basis: 30%;
   padding: 1rem;
+  width: 30%;
 }
 
 .map {
   flex-basis: 70%;
-  max-width: 70%;
+  width: 70%;
 }
 </style>
