@@ -1,4 +1,5 @@
 import postgres from 'postgres'
+import type { LocationPointType } from '../locations'
 const connectionString: string = import.meta.env.VITE_DATABASE_URL
 if (!connectionString) throw new Error('DATABASE_URL must be set')
 
@@ -11,7 +12,7 @@ export const getKingdomBoundaries = async () =>
     FROM kingdoms;`
 
 /** Query the locations as geojson for a given type */
-export const getLocations = async (type: string) =>
+export const getLocations = async (type: LocationPointType) =>
   sql`
       SELECT ST_AsGeoJSON(geog), name, type, gid
       FROM locations
@@ -35,9 +36,9 @@ export const countCastles = async (kingdomGid: number) =>
         AND locations.type = 'Castle';`
 
 /** Get the summary for a location or region, by id */
-export const getSummary = async (table: string, gid: number) =>
+export const getSummary = async (table: 'locations' | 'kingdoms', gid: number) =>
   await sql`
-      SELECT summary, url
+      SELECT name, summary, url
       FROM ${sql(table)}
       WHERE gid = ${gid}
       LIMIT(1);`

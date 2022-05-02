@@ -1,12 +1,7 @@
 import { addRowMetadataAsProperties } from './db/addRowMetadataAsProperties'
 import * as Q from './db/queries'
-import type { KingdomBoundary, KingdomPolygon } from './kingdoms'
-
-const wrapKingdomAsGeoJson = (geometry: KingdomPolygon): KingdomBoundary => ({
-  type: 'Feature',
-  geometry,
-  properties: geometry.properties
-})
+import type { KingdomBoundary, KingdomSummary } from './kingdoms'
+import { wrapGeometryAsGeoJson } from './wrapGeometryAsGeoJson'
 
 export const getKingdomBoundaries = async (): Promise<KingdomBoundary[]> => {
   const boundaries = await Q.getKingdomBoundaries()
@@ -15,14 +10,14 @@ export const getKingdomBoundaries = async (): Promise<KingdomBoundary[]> => {
   }
 
   const kingdomBoundaries = boundaries.map((row) =>
-    wrapKingdomAsGeoJson(addRowMetadataAsProperties(row, 'name', 'gid'))
+    wrapGeometryAsGeoJson(addRowMetadataAsProperties(row, 'name', 'gid'))
   )
 
   return kingdomBoundaries as KingdomBoundary[]
 }
 
-export const getKingdomSummary = async (gid: number): Promise<any> => {
+export const getKingdomSummary = async (gid: number): Promise<KingdomSummary> => {
   const [summary] = await Q.getSummary('kingdoms', gid)
 
-  return summary
+  return summary as KingdomSummary
 }

@@ -9,3 +9,9 @@ export type KingdomPolygon = {
 export type KingdomBoundary = GeoJSON.Feature & {
   properties: { name: string; gid: number }
 }
+
+export type KingdomSummary = {
+  name: string
+  summary: string
+  url: string
+}

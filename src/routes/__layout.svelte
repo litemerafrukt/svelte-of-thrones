@@ -1,35 +1,43 @@
 <script lang="ts" context="module">
 import type { LoadInput } from '@sveltejs/kit'
 
-let kingdomBoundaries: KingdomBoundary[]
+let layerCache: {
+  kingdomBoundaries: KingdomBoundary[]
+  locations: Location[]
+} | null = null
 
 export async function load({ params, fetch, session, stuff }: LoadInput) {
   try {
-    if (!kingdomBoundaries) {
-      kingdomBoundaries = await fetch('/api/kingdoms/boundaries.json').then(
-        (response) => {
+    if (!layerCache) {
+      const [kingdomBoundaries, locations] = await Promise.all([
+        fetch('/api/kingdoms/boundaries.json').then((response) => {
           if (!response.ok) {
             throw new Error('Failed to load kingdom boundaries')
           }
           return response.json()
-        }
-      )
+        }),
+        fetch('/api/locations/locations.json').then((response) => {
+          if (!response.ok) {
+            throw new Error('Failed to load locations')
+          }
+          return response.json()
+        })
+      ])
+      layerCache = {
+        kingdomBoundaries,
+        locations
+      }
     }
 
     let selectedKingdom: number | null = Number(params.gid)
     if (Number.isNaN(selectedKingdom)) selectedKingdom = null
 
-    const kingdomNames = kingdomBoundaries.reduce((names, boundary) => {
-      names[boundary.properties.gid] = boundary.properties.name
-      return names
-    }, {} as { [gid: number]: string })
-
     return {
       status: 200,
-      stuff: { kingdomNames },
       props: {
         selectedKingdom,
-        kingdomBoundaries
+        kingdomBoundaries: layerCache.kingdomBoundaries,
+        locations: layerCache.locations
       }
     }
   } catch (error) {
@@ -49,7 +57,10 @@ import type { KingdomBoundary } from '$lib/models/kingdoms'
 import { page } from '$app/stores'
 
 export let kingdomBoundaries: KingdomBoundary[]
+export let locations: Location[]
 export let selectedKingdom: number | null = null
+
+console.log(locations)
 
 page.subscribe((state) => {
   if (state.params.gid) {
