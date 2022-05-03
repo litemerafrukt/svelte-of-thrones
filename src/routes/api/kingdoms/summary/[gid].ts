@@ -5,11 +5,11 @@ export const get: RequestHandler = async ({ params }) => {
   const gid = Number(params.gid)
 
   try {
-    const kingdomBoundaries = await getKingdomSummary(gid)
+    const kingdomSummary = await getKingdomSummary(gid)
 
     return {
       status: 200,
-      body: kingdomBoundaries
+      body: kingdomSummary
     }
   } catch (err: any) {
     console.error(err)
