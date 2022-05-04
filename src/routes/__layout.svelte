@@ -60,8 +60,6 @@ export let kingdomBoundaries: KingdomBoundary[]
 export let locations: Location[]
 export let selectedKingdom: number | null = null
 
-console.log(locations)
-
 page.subscribe((state) => {
   if (state.params.gid) {
     selectedKingdom = Number(state.params.gid)
