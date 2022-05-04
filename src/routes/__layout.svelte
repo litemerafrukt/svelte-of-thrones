@@ -50,10 +50,11 @@ export async function load({ params, fetch, session, stuff }: LoadInput) {
 </script>
 
 <script lang="ts">
-import Kingdoms from '$lib/components/Kingdoms.svelte'
-
 import MapOfWesteros from '$lib/components/MapOfWesteros.svelte'
+import Kingdoms from '$lib/components/Kingdoms.svelte'
+import Locations from '$lib/components/Locations.svelte'
 import type { KingdomBoundary } from '$lib/models/kingdoms'
+import type { Location } from '$lib/models/locations'
 import { page } from '$app/stores'
 
 export let kingdomBoundaries: KingdomBoundary[]
@@ -75,6 +76,7 @@ page.subscribe((state) => {
   <div class="map">
     <MapOfWesteros>
       <Kingdoms boundaries={kingdomBoundaries} selected={selectedKingdom} />
+      <Locations {locations} selected={null} />
     </MapOfWesteros>
   </div>
 </div>

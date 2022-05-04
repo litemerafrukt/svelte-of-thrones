@@ -7,6 +7,8 @@ export const locationPointTypes = [
   'landmark'
 ] as const
 
+export const locationId = (gid: number) => `location-source-${gid}`
+
 export type LocationPointType = typeof locationPointTypes[number]
 
 export type LocationPoint = {

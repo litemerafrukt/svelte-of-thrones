@@ -1,4 +1,4 @@
-export const kingdomBoundaryId = (gid: number): string => `kingdom-boundary-${gid}`
+export const kingdomBoundaryId = (gid: number): string => `kingdom-boundary-source-${gid}`
 
 export type KingdomPolygon = {
   type: 'MultiPolygon'

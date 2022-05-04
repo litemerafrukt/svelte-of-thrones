@@ -1,5 +1,6 @@
 <script lang="ts">
 import { kingdomBoundaryId, type KingdomBoundary } from '$lib/models/kingdoms'
+import { removeSource } from '$lib/utilities/mapBox/remove'
 import { getContext, onDestroy, onMount } from 'svelte'
 import Kingdom from './Kingdom.svelte'
 
@@ -28,7 +29,7 @@ onDestroy(() => {
   boundaries.forEach((boundary) => {
     const gid = boundary.properties.gid
     const sourceId = kingdomBoundaryId(gid)
-    map.removeSource(sourceId)
+    removeSource(map, sourceId)
   })
   sourceAdded = false
 })

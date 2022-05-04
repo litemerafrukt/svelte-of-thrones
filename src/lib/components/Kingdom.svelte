@@ -1,7 +1,7 @@
 <script lang="ts">
 import { goto } from '$app/navigation'
-
 import { kingdomBoundaryId, type KingdomBoundary } from '$lib/models/kingdoms'
+import { removeLayer, removeSource } from '$lib/utilities/mapBox/remove'
 import type mapboxgl from 'mapbox-gl'
 import { getContext, onDestroy, onMount } from 'svelte'
 
@@ -50,8 +50,8 @@ onMount(() => {
 })
 
 onDestroy(() => {
-  map.removeLayer(outlineLayerId)
-  map.removeLayer(fillLayerId)
   map.off('click', fillLayerId, onClick)
+  removeLayer(map, outlineLayerId)
+  removeLayer(map, fillLayerId)
 })
 </script>
