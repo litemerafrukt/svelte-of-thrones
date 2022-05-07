@@ -70,7 +70,7 @@ export let locationCollection: LocationCollection
 export let selectedKingdom: number | null = null
 
 page.subscribe((state) => {
-  if (state.params.gid) {
+  if (state.params.type === 'kingdom' && state.params.gid) {
     selectedKingdom = Number(state.params.gid)
   } else {
     selectedKingdom = null
