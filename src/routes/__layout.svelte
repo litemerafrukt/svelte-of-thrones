@@ -84,7 +84,7 @@ page.subscribe((state) => {
   <div class="map">
     <MapOfWesteros>
       <Kingdoms boundaries={kingdomBoundaries} selected={selectedKingdom} />
-      <Locations {locations} selected={null} />
+      <!-- <Locations {locations} selected={null} /> -->
     </MapOfWesteros>
   </div>
 </div>

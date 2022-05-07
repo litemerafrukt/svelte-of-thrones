@@ -20,7 +20,7 @@ const onClick = () => {
   if (isSelected) {
     goto(`/`)
   } else {
-    goto(`${gid}`)
+    goto(`kingdom-${gid}`)
   }
 }
 
