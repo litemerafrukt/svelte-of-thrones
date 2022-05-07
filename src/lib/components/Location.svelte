@@ -4,7 +4,7 @@ import { removeLayer } from '$lib/utilities/mapBox/remove'
 import { getContext, onDestroy, onMount } from 'svelte'
 
 export let location: Location
-export let isSelected: boolean
+export const isSelected: boolean = false
 
 const { getMap } = getContext<{ getMap: () => mapboxgl.Map }>('mapbox-gl')
 const map = getMap()

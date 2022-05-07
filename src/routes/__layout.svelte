@@ -6,28 +6,36 @@ let layerCache: {
   locations: Location[]
 } | null = null
 
+async function fetchCachedLayoutData(
+  fetch: LoadInput['fetch']
+): Promise<NonNullable<typeof layerCache>> {
+  if (!layerCache) {
+    const [kingdomBoundaries, locations] = await Promise.all([
+      fetch('/api/kingdoms/boundaries.json').then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to load kingdom boundaries')
+        }
+        return response.json()
+      }),
+      fetch('/api/locations/locations.json').then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to load locations')
+        }
+        return response.json()
+      })
+    ])
+    layerCache = {
+      kingdomBoundaries,
+      locations
+    }
+  }
+
+  return layerCache
+}
+
 export async function load({ params, fetch, session, stuff }: LoadInput) {
   try {
-    if (!layerCache) {
-      const [kingdomBoundaries, locations] = await Promise.all([
-        fetch('/api/kingdoms/boundaries.json').then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to load kingdom boundaries')
-          }
-          return response.json()
-        }),
-        fetch('/api/locations/locations.json').then((response) => {
-          if (!response.ok) {
-            throw new Error('Failed to load locations')
-          }
-          return response.json()
-        })
-      ])
-      layerCache = {
-        kingdomBoundaries,
-        locations
-      }
-    }
+    const layerCache = await fetchCachedLayoutData(fetch)
 
     let selectedKingdom: number | null = Number(params.gid)
     if (Number.isNaN(selectedKingdom)) selectedKingdom = null
