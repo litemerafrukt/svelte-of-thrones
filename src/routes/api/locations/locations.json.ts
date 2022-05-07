@@ -5,7 +5,10 @@ import { getLocations } from '$lib/models/locations.server'
 export const get = async () => {
   try {
     const locations = await Promise.all(
-      locationPointTypes.map((locationType) => getLocations(locationType))
+      locationPointTypes.map((locationType) => getLocations(locationType).then((locations) => ({
+        type: locationType,
+        locations,
+      })))
     )
 
     return {

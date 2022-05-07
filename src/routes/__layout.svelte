@@ -3,7 +3,7 @@ import type { LoadInput } from '@sveltejs/kit'
 
 let layerCache: {
   kingdomBoundaries: KingdomBoundary[]
-  locations: Location[]
+  locations: LocationCollection[]
 } | null = null
 
 async function fetchCachedLayoutData(
@@ -37,6 +37,8 @@ export async function load({ params, fetch, session, stuff }: LoadInput) {
   try {
     const layerCache = await fetchCachedLayoutData(fetch)
 
+    console.log(layerCache.locations)
+
     let selectedKingdom: number | null = Number(params.gid)
     if (Number.isNaN(selectedKingdom)) selectedKingdom = null
 
@@ -62,11 +64,11 @@ import MapOfWesteros from '$lib/components/MapOfWesteros.svelte'
 import Kingdoms from '$lib/components/Kingdoms.svelte'
 import Locations from '$lib/components/Locations.svelte'
 import type { KingdomBoundary } from '$lib/models/kingdoms'
-import type { Location } from '$lib/models/locations'
+import type { LocationCollection } from '$lib/models/locations'
 import { page } from '$app/stores'
 
 export let kingdomBoundaries: KingdomBoundary[]
-export let locations: Location[]
+export let locations: LocationCollection[]
 export let selectedKingdom: number | null = null
 
 page.subscribe((state) => {

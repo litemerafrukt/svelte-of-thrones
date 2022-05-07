@@ -21,6 +21,11 @@ export type Location = GeoJSON.Feature & {
   properties: { name: string; type: string; gid: number }
 }
 
+export type LocationCollection = {
+  type: LocationPointType
+  locations: Location[]
+}[]
+
 export type LocationSummary = {
   name: string
   summary: string

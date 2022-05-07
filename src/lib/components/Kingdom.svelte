@@ -1,7 +1,7 @@
 <script lang="ts">
 import { goto } from '$app/navigation'
 import { kingdomBoundaryId, type KingdomBoundary } from '$lib/models/kingdoms'
-import { removeLayer, removeSource } from '$lib/utilities/mapBox/remove'
+import { removeLayer } from '$lib/utilities/mapBox/remove'
 import type mapboxgl from 'mapbox-gl'
 import { getContext, onDestroy, onMount } from 'svelte'
 
