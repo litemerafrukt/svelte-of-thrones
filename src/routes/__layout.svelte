@@ -37,8 +37,6 @@ export async function load({ params, fetch, session, stuff }: LoadInput) {
   try {
     const layerCache = await fetchCachedLayoutData(fetch)
 
-    console.log(layerCache.locations)
-
     let selectedKingdom: number | null = Number(params.gid)
     if (Number.isNaN(selectedKingdom)) selectedKingdom = null
 
@@ -47,7 +45,7 @@ export async function load({ params, fetch, session, stuff }: LoadInput) {
       props: {
         selectedKingdom,
         kingdomBoundaries: layerCache.kingdomBoundaries,
-        locations: layerCache.locations
+        locationCollection: layerCache.locations
       }
     }
   } catch (error) {
@@ -68,7 +66,7 @@ import type { LocationCollection } from '$lib/models/locations'
 import { page } from '$app/stores'
 
 export let kingdomBoundaries: KingdomBoundary[]
-export let locations: LocationCollection[]
+export let locationCollection: LocationCollection
 export let selectedKingdom: number | null = null
 
 page.subscribe((state) => {
@@ -86,7 +84,7 @@ page.subscribe((state) => {
   <div class="map">
     <MapOfWesteros>
       <Kingdoms boundaries={kingdomBoundaries} selected={selectedKingdom} />
-      <!-- <Locations {locations} selected={null} /> -->
+      <Locations {locationCollection} />
     </MapOfWesteros>
   </div>
 </div>

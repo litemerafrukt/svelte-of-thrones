@@ -17,7 +17,7 @@ export type LocationPoint = {
   properties: { name: string; type: string; gid: number }
 }
 
-export type Location = GeoJSON.Feature & {
+export type Location = GeoJSON.Feature<GeoJSON.Point> & {
   properties: { name: string; type: string; gid: number }
 }
 

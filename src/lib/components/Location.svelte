@@ -1,35 +1,38 @@
 <script lang="ts">
-import { locationId, type Location } from '$lib/models/locations'
-import { removeLayer } from '$lib/utilities/mapBox/remove'
+import type { Location, LocationPointType } from '$lib/models/locations'
+import mapboxgl from 'mapbox-gl'
 import { getContext, onDestroy, onMount } from 'svelte'
 
 export let location: Location
-export const isSelected: boolean = false
+export let type: LocationPointType
 
 const { getMap } = getContext<{ getMap: () => mapboxgl.Map }>('mapbox-gl')
 const map = getMap()
 
-const gid = location.properties.gid
-const sourceId = locationId(gid)
-const markerId = `location-marker-${gid}`
+function mapMarker(element: HTMLElement) {
+  const marker = new mapboxgl.Marker(element)
+    .setLngLat(location.geometry.coordinates as mapboxgl.LngLatLike)
+    .addTo(map)
 
-onMount(() => {
-  map.addLayer({
-    id: markerId,
-    type: 'symbol',
-    source: sourceId,
-    layout: {
-      'icon-image': 'got-marker'
-      // get the title from the source's "name" property
-      // 'text-field': ['get', 'name'],
-      // 'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
-      // 'text-offset': [0, 1.25],
-      // 'text-anchor': 'top'
+  return {
+    destroy() {
+      marker.remove()
     }
-  })
-})
-
-onDestroy(() => {
-  removeLayer(map, markerId)
-})
+  }
+}
 </script>
+
+<div class="marker" use:mapMarker />
+
+<style>
+.marker {
+  display: block;
+  background-color: #fff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+}
+</style>
