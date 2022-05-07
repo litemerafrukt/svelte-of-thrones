@@ -16,7 +16,7 @@ const sourceId = kingdomBoundaryId(gid)
 const fillLayerId = `kingdom-${gid}`
 const outlineLayerId = `kingdom-outline-${gid}`
 const fillColor = isSelected ? '#0a0' : '#222'
-const onClick = () => {
+const handleClick = () => {
   if (isSelected) {
     goto(`/`)
   } else {
@@ -46,11 +46,11 @@ onMount(() => {
         'line-opacity': 0.65
       }
     })
-    .on('click', fillLayerId, onClick)
+    .on('click', fillLayerId, handleClick)
 })
 
 onDestroy(() => {
-  map.off('click', fillLayerId, onClick)
+  map.off('click', fillLayerId, handleClick)
   removeLayer(map, outlineLayerId)
   removeLayer(map, fillLayerId)
 })
