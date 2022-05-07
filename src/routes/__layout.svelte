@@ -72,6 +72,8 @@ export let selectedKingdom: number | null = null
 page.subscribe((state) => {
   if (state.params.gid) {
     selectedKingdom = Number(state.params.gid)
+  } else {
+    selectedKingdom = null
   }
 })
 </script>
