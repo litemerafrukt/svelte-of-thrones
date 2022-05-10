@@ -4,7 +4,7 @@ import type { KingdomSummary } from '$lib/models/kingdoms'
 export let kingdom: KingdomSummary
 </script>
 
-<h1>{kingdom.name}</h1>
+<h2>{kingdom.name}</h2>
 <p>
   {kingdom.summary}
 </p>

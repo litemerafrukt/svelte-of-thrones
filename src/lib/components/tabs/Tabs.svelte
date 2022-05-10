@@ -5,33 +5,30 @@ export const Tabs = Symbol('tabs')
 <script lang="ts">
 import { setContext, onDestroy } from 'svelte'
 import { writable } from 'svelte/store'
+import * as A from '$lib/utilities/array'
 
-const tabs: symbol[] = []
-const panels: symbol[] = []
+let tabs: symbol[] = []
+let panels: symbol[] = []
 const selectedTab = writable<symbol | undefined>(undefined)
 const selectedPanel = writable<symbol | undefined>(undefined)
 
 function registerTab(tab: symbol) {
-  tabs.push(tab)
+  tabs = A.add(tabs, tab)
   selectedTab.update((current) => current ?? tab)
 
   onDestroy(() => {
-    const tabIndex = tabs.indexOf(tab)
-    if (tabIndex !== -1) tabs.splice(tabIndex, 1)
-    selectedTab.update((current) => (current === tab ? tabs.at(tabIndex) : current))
+    tabs = A.remove(tabs, tab)
+    selectedTab.update((current) => (current === tab ? tabs.at(0) : current))
   })
 }
 
 function registerPanel(panel: symbol) {
-  panels.push(panel)
+  panels = A.add(panels, panel)
   selectedPanel.update((current) => current ?? panel)
 
   onDestroy(() => {
-    const panelIndex = panels.indexOf(panel)
-    if (panelIndex !== -1) panels.splice(panelIndex, 1)
-    selectedPanel.update((current) =>
-      current === panel ? panels.at(panelIndex) : current
-    )
+    panels = A.remove(panels, panel)
+    selectedPanel.update((current) => (current === panel ? panels.at(0) : current))
   })
 }
 
@@ -52,3 +49,6 @@ setContext(Tabs, {
 <div class="tabs">
   <slot />
 </div>
+
+<style>
+</style>

@@ -58,12 +58,14 @@ export async function load({ params, fetch, session, stuff }: LoadInput) {
 </script>
 
 <script lang="ts">
+import 'core-js/proposals/change-array-by-copy'
 import MapOfWesteros from '$lib/components/MapOfWesteros.svelte'
 import Kingdoms from '$lib/components/Kingdoms.svelte'
 import Locations from '$lib/components/Locations.svelte'
 import type { KingdomBoundary } from '$lib/models/kingdoms'
 import type { LocationCollection } from '$lib/models/locations'
 import { page } from '$app/stores'
+import SidePanel from '$lib/components/SidePanel.svelte'
 
 export let kingdomBoundaries: KingdomBoundary[]
 export let locationCollection: LocationCollection
@@ -80,7 +82,9 @@ page.subscribe((state) => {
 
 <div class="layout-wrap">
   <div class="info-panel">
-    <slot />
+    <SidePanel>
+      <slot />
+    </SidePanel>
   </div>
 
   <div class="map">
@@ -93,21 +97,20 @@ page.subscribe((state) => {
 
 <style>
 .layout-wrap {
-  display: flex;
+  display: grid;
+  grid-template-columns: 430px 1fr;
   height: 100%;
   width: 100%;
 }
 
 .info-panel {
+  display: inline;
   color: #aaa;
   background-color: #222;
-  flex-basis: 30%;
-  padding: 1rem;
-  width: 30%;
+  padding: 5px;
 }
 
 .map {
-  flex-basis: 70%;
-  width: 70%;
+  display: inline;
 }
 </style>

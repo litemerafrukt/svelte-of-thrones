@@ -4,7 +4,7 @@ import type { LocationSummary } from '$lib/models/locations'
 export let location: LocationSummary
 </script>
 
-<h1>{location.name}</h1>
+<h2>{location.name}</h2>
 <p>
   {location.summary}
 </p>
