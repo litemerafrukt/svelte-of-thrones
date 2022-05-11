@@ -10,3 +10,9 @@ export let location: LocationSummary
 </p>
 
 <a href={location.url}>more...</a>
+
+<style>
+p {
+  font-size: smaller;
+}
+</style>

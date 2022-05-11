@@ -1,4 +1,4 @@
-import { KingdomBoundary, KingdomPolygon } from './kingdoms'
+import type { KingdomBoundary, KingdomPolygon } from './kingdoms'
 
 export const wrapGeometryAsGeoJson = (geometry: KingdomPolygon): KingdomBoundary => ({
   type: 'Feature',

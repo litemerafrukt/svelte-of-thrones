@@ -1,5 +1,6 @@
-<script>
+<script lang="ts">
 import { Tabs, TabList, TabPanel, Tab } from '$lib/components/tabs/Index.svelte'
+import Layers from './Layers.svelte'
 </script>
 
 <Tabs>
@@ -19,6 +20,7 @@ import { Tabs, TabList, TabPanel, Tab } from '$lib/components/tabs/Index.svelte'
     <TabPanel>
       <div class="panel-wrap">
         <h2>Layers</h2>
+        <Layers />
       </div>
     </TabPanel>
 
