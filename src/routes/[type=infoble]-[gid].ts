@@ -18,6 +18,7 @@ export const get: RequestHandler = async ({ params }) => {
     status: 200,
     body: { location },
     headers: {
+      'Cache-Control': 'max-age=86400',
       ETag: hashString(JSON.stringify(location))
     }
   }
