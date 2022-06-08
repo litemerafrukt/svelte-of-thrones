@@ -1,0 +1,5 @@
+- [ ] concentrate layer logic to a store, currently outsourced to
+  - Layers.svelte
+  - Kingdoms.svelte
+  - Locations.svelte
+- [ ] UI
