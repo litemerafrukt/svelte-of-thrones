@@ -1,13 +1,13 @@
 <script lang="ts" context="module">
-import type { LocationPointType } from '$lib/models/locations'
+import { type LocationPointType, locationPointTypes } from '$lib/models/locations'
 import { writable } from 'svelte/store'
+
+const layers: (LocationPointType | 'kingdom')[] = ['kingdom', ...locationPointTypes]
 
 export let activeLayers = writable<(LocationPointType | 'kingdom')[]>([...layers])
 </script>
 
 <script lang="ts">
-import { locationPointTypes as layers } from '$lib/models/locations'
-
 $: console.log($activeLayers)
 </script>
 

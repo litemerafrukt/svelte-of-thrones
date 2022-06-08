@@ -3,6 +3,7 @@ import { kingdomBoundaryId, type KingdomBoundary } from '$lib/models/kingdoms'
 import { removeSource } from '$lib/utilities/mapBox/remove'
 import { getContext, onDestroy, onMount } from 'svelte'
 import Kingdom from './Kingdom.svelte'
+import { activeLayers } from './Layers.svelte'
 
 export let boundaries: KingdomBoundary[]
 export let selected: number | null
@@ -15,9 +16,7 @@ const map = getMap()
 onMount(() => {
   boundaries.forEach((boundary) => {
     const gid = boundary.properties.gid
-    const sourceId = kingdomBoundaryId(gid)
-
-    map.addSource(sourceId, {
+    map.addSource(kingdomBoundaryId(gid), {
       type: 'geojson',
       data: boundary
     })
@@ -28,14 +27,15 @@ onMount(() => {
 onDestroy(() => {
   boundaries.forEach((boundary) => {
     const gid = boundary.properties.gid
-    const sourceId = kingdomBoundaryId(gid)
-    removeSource(map, sourceId)
+    removeSource(map, kingdomBoundaryId(gid))
   })
   sourceAdded = false
 })
+
+$: shouldShowKingdoms = $activeLayers.includes('kingdom')
 </script>
 
-{#if sourceAdded}
+{#if sourceAdded && shouldShowKingdoms}
   {#each boundaries as boundary (`${kingdomBoundaryId(boundary.properties.gid)}-${selected === boundary.properties.gid}`)}
     <Kingdom {boundary} isSelected={selected === boundary.properties.gid} />
   {/each}
